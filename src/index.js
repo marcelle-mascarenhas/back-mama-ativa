@@ -20,9 +20,9 @@ app.get('/', (req, res) => { console.log('olá mundo') })
 //milk bank
 
 app.post('/milk-bank', async (req, res) => {
-    const { name_bank, address, information } = req.body
+    const { name_bank, address } = req.body
     try {
-        const milkBank = await pool.query('INSERT INTO milk_bank(name_bank, address, information) VALUES ($1, $2, $3) RETURNING *', [name_bank, address, information])
+        const milkBank = await pool.query('INSERT INTO milk_bank(name_bank, address) VALUES ($1, $2) RETURNING *', [name_bank, address])
         return res.status(200).send(milkBank.rows)
     } catch (err) {
         return res.status(400).send(err)
@@ -44,7 +44,7 @@ app.patch('/milk-bank/:milk_bank_id', async (req, res) => {
     const data = req.body
 
     try {
-        const updatedMilkBank = await pool.query('UPDATE milk_bank SET name_bank = ($1), address = ($2), information = ($3) WHERE milk_bank_id = ($4) RETURNING *', [data.name_bank, data.address, data.information, milk_bank_id])
+        const updatedMilkBank = await pool.query('UPDATE milk_bank SET name_bank = ($1), address = ($2) WHERE milk_bank_id = ($4) RETURNING *', [data.name_bank, data.address, milk_bank_id])
         return res.status(200).send(updatedMilkBank.rows)
     } catch (err) {
         return res.status(400).send(err)
